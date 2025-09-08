@@ -17,10 +17,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install shellcheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
       - name: Run shellcheck
-        uses: ludeeus/action-shellcheck@v2
-        with:
-          severity: warning
+        run: |
+          git ls-files '*.sh' | xargs -r shellcheck -S warning -x
 
       - name: Install shfmt
         run: |
