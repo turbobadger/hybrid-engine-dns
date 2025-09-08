@@ -1,4 +1,4 @@
-# Contributing to turboDNS
+# Contributing to hybrid-engine-dns
 
 Thanks for your interest in contributing!
 

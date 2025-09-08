@@ -1,21 +1,23 @@
-# turboDNS
+# hybrid-engine-dns
 
-Private WIP: a clean, reproducible, and privacy‑focused home lab DNS stack using Docker and BIND9/Unbound.
+Private WIP: a clean, reproducible, and privacy‑focused home lab DNS stack using Docker with BIND9, Unbound, and Pi-hole.
 
 Goals
 - Professional structure and automation from day one
 - Strong defaults for privacy and security
 - Reproducible Docker-based deployment for home networks
+- Support for a private subdomain zone for internal services
 
 Images used
 - ubuntu/bind9:9.18-22.04
 - bind9:9.18-22.04
+- pihole/pihole (version TBD)
 
 Status
 - This repository starts private while building. Once stabilized and documented, it will be made public.
 
 Quick start (placeholder)
-- Coming soon. This will include Docker Compose and configuration examples for BIND9 and Unbound.
+- Coming soon. This will include Docker Compose and configuration examples for BIND9, Unbound, and Pi-hole.
 
 Development
 - CI runs:
