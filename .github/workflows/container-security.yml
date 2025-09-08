@@ -1,0 +1,42 @@
+name: container-security
+
+on:
+  pull_request:
+    branches: ["main"]
+  schedule:
+    - cron: "29 4 * * 1"  # Mondays at 04:29 UTC
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  trivy-images:
+    name: Trivy scan images (matrix)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - traefik:v3.1
+          - ubuntu/bind9:9.18-22.04
+          - nlnetlabs/unbound:1.20.0
+          - pihole/pihole:2024.07.0
+    steps:
+      - name: Pull image
+        run: |
+          docker pull ${{ matrix.image }}
+      - name: Trivy image scan (SARIF)
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: ${{ matrix.image }}
+          format: 'sarif'
+          output: 'trivy-${{ matrix.image }}.sarif'
+          exit-code: '0'     # non-blocking; surfaces in code scanning
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+      - name: Upload SARIF to code scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-${{ matrix.image }}.sarif'
+
