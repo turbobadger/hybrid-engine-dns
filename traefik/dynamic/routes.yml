@@ -1,0 +1,202 @@
+# Traefik file provider routes (sanitized)
+# Replace hostnames under home.example.com and example IPs/ports with your real services.
+
+http:
+  routers:
+    # NOTE: leave these as examples; copy and tweak for your setup
+    nas:
+      rule: Host(`nas.home.example.com`)           # TODO: set your subdomain
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: nas
+    pve:
+      rule: Host(`pve.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: pve
+    pbs:
+      rule: Host(`pbs.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: pbs
+    unifi:
+      rule: Host(`unifi.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: unifi
+    usw24:
+      rule: Host(`usw24.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: usw24
+    usw16:
+      rule: Host(`usw16.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: usw16
+    ap:
+      rule: Host(`ap.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: ap
+    idrac:
+      rule: Host(`idrac.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers, basicauth]
+      service: idrac
+    udm:
+      rule: Host(`udm.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers, basicauth]
+      service: udm
+    plex:
+      rule: Host(`plex.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: plex
+    dashboard:
+      rule: Host(`dashboard.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: dashboard
+    unvr:
+      rule: Host(`unvr.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: unvr
+    cyberchef:
+      rule: Host(`cyberchef.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: cyberchef
+    kuma:
+      rule: Host(`kuma.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: kuma
+    ha:
+      rule: Host(`ha.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: ha
+    homebridge:
+      rule: Host(`homebridge.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: homebridge
+    homey:
+      rule: Host(`homey.home.example.com`)
+      entryPoints: [websecure]
+      tls:
+        certResolver: le
+      middlewares: [secure-headers]
+      service: homey
+
+  services:
+    # Replace placeholder IPs/ports with real ones
+    nas:
+      loadBalancer:
+        servers:
+          - url: "http://192.0.2.10:80"     # TODO
+    pve:
+      loadBalancer:
+        servers:
+          - url: "https://192.0.2.11:8006"  # TODO: enable serversTransport if self-signed
+      serversTransport: selfsigned
+    pbs:
+      loadBalancer:
+        servers:
+          - url: "https://192.0.2.12:8007"
+      serversTransport: selfsigned
+    unifi:
+      loadBalancer:
+        servers:
+          - url: "https://192.0.2.13:8443"
+      serversTransport: selfsigned
+    usw24:
+      loadBalancer:
+        servers:
+          - url: "http://192.0.2.14:80"
+    usw16:
+      loadBalancer:
+        servers:
+          - url: "http://192.0.2.15:80"
+    ap:
+      loadBalancer:
+        servers:
+          - url: "http://192.0.2.16:80"
+    idrac:
+      loadBalancer:
+        servers:
+          - url: "https://192.0.2.17:443"
+      serversTransport: selfsigned
+    udm:
+      loadBalancer:
+        servers:
+          - url: "https://192.0.2.18:443"
+      serversTransport: selfsigned
+    plex:
+      loadBalancer:
+        servers:
+          - url: "http://192.0.2.19:32400"
+    dashboard:
+      loadBalancer:
+        servers:
+          - url: "http://192.0.2.20:80"
+    unvr:
+      loadBalancer:
+        servers:
+          - url: "http://192.0.2.21:7443"
+    cyberchef:
+      loadBalancer:
+        servers:
+          - url: "http://192.0.2.22:8000"
+    kuma:
+      loadBalancer:
+        servers:
+          - url: "http://192.0.2.23:3001"
+    ha:
+      loadBalancer:
+        servers:
+          - url: "http://192.0.2.31:8123"
+    homebridge:
+      loadBalancer:
+        servers:
+          - url: "http://192.0.2.32:8581"
+    homey:
+      loadBalancer:
+        servers:
+          - url: "http://192.0.2.33:80"
+

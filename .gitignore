@@ -14,6 +14,14 @@ logs/
 .env
 .env.*
 
+# Secrets/keys
+config/rndc.key
+traefik/acme/acme.json
+
+# Local volumes
+pihole/etc-pihole/
+pihole/etc-dnsmasq.d/
+
 # Docker
 docker-compose.override.yml
 

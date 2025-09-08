@@ -1,0 +1,79 @@
+// Local zones configuration (sanitized)
+// TODO: Replace example domains and reverse zones with your actual ones.
+
+// Forward zone for your internal-only domain
+zone "example.lan" {
+    type master;
+    file "/var/lib/bind/db.example.lan";
+    allow-update { none; };
+    allow-transfer { internal_networks; };
+    allow-query { internal_networks; };
+    // also-notify { 192.0.2.11; };  // TODO: Secondary IP (optional)
+};
+
+// Split-DNS subdomain for your public domain
+zone "home.example.com" {
+    type master;
+    file "/var/lib/bind/db.home.example.com";
+    allow-update { none; };
+    allow-transfer { internal_networks; };
+    allow-query { internal_networks; };
+    // also-notify { 192.0.2.11; };  // TODO: Secondary IP (optional)
+};
+
+// Reverse zones for example VLAN networks
+// Format: for network A.B.C.0/24, reverse zone is C.B.A.in-addr.arpa
+
+// Default LAN (example) - 10.10.0.0/24
+zone "0.10.10.in-addr.arpa" {
+    type master;
+    file "/var/lib/bind/db.10.10.0";
+    allow-update { none; };
+    allow-transfer { internal_networks; };
+    allow-query { internal_networks; };
+    // also-notify { 192.0.2.11; };  // Secondary (optional)
+};
+
+// Trusted LAN (example) - 10.20.0.0/24
+zone "0.20.10.in-addr.arpa" {
+    type master;
+    file "/var/lib/bind/db.10.20.0";
+    allow-update { none; };
+    allow-transfer { internal_networks; };
+    allow-query { internal_networks; };
+    // also-notify { 192.0.2.11; };
+};
+
+// IoT LAN (example) - 10.30.0.0/24
+zone "0.30.10.in-addr.arpa" {
+    type master;
+    file "/var/lib/bind/db.10.30.0";
+    allow-update { none; };
+    allow-transfer { internal_networks; };
+    allow-query { internal_networks; };
+    // also-notify { 192.0.2.11; };
+};
+
+// Monitors LAN (example) - 10.40.0.0/24
+zone "0.40.10.in-addr.arpa" {
+    type master;
+    file "/var/lib/bind/db.10.40.0";
+    allow-update { none; };
+    allow-transfer { internal_networks; };
+    allow-query { internal_networks; };
+    // also-notify { 192.0.2.11; };
+};
+
+// Servers LAN (example) - 192.168.50.0/24
+zone "50.168.192.in-addr.arpa" {
+    type master;
+    file "/var/lib/bind/db.192.168.50";
+    allow-update { none; };
+    allow-transfer { internal_networks; };
+    allow-query { internal_networks; };
+    // also-notify { 192.0.2.11; };
+};
+
+// Remote Name Daemon Control (RNDC) configuration
+include "/etc/bind/rndc.key";
+

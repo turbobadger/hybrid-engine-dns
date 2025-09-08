@@ -1,0 +1,19 @@
+; Reverse zone file (example) - 10.20.0.0/24
+
+$TTL    604800
+@       IN      SOA     ns1.example.lan. admin.example.lan. (
+                         2025090801 ; Serial (YYYYMMDDNN)
+                         604800     ; Refresh
+                         86400      ; Retry
+                         2419200    ; Expire
+                         604800 )   ; Negative Cache TTL
+
+; Name servers
+@       IN      NS      ns1.example.lan.
+@       IN      NS      ns2.example.lan.
+
+; PTR records (examples)
+1       IN      PTR     gateway-trusted.example.lan.
+100     IN      PTR     admin-pc.example.lan.
+200     IN      PTR     backup-server.example.lan.
+
