@@ -1,0 +1,62 @@
+# Bug report
+name: Bug report
+description: File a bug report to help us improve
+labels: [bug]
+title: "[Bug] <short description>"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: A clear and concise description of the problem
+      placeholder: "DNS query to local domain fails intermittently"
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Provide commands, configuration snippets, and logs
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: OS, Docker version, network details, etc.
+      placeholder: |
+        - macOS 14.5
+        - Docker 27.x
+        - Home network / VLAN setup
+    validations:
+      required: false
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues and Discussions
+          required: true
+        - label: I am not reporting a security vulnerability
+          required: true
+

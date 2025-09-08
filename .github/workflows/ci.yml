@@ -1,0 +1,50 @@
+name: ci
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run shellcheck
+        uses: ludeeus/action-shellcheck@v2
+        with:
+          severity: warning
+
+      - name: Install shfmt
+        run: |
+          curl -sSL https://github.com/mvdan/sh/releases/latest/download/shfmt_linux_amd64 -o /usr/local/bin/shfmt
+          chmod +x /usr/local/bin/shfmt
+
+      - name: Run shfmt (diff mode)
+        run: |
+          shfmt -f . | xargs -r -I {} sh -c 'shfmt -d -i 2 -s "{}"'
+
+      - name: Run hadolint (if Dockerfiles exist)
+        if: ${{ hashFiles('**/Dockerfile') != '' }}
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: |
+            **/Dockerfile
+
+      - name: Trivy FS scan (non-blocking)
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'table'
+          exit-code: '0'
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW'
+
