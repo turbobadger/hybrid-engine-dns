@@ -1,0 +1,38 @@
+name: "Container Security"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '15 14 * * 1'
+
+jobs:
+  scan:
+    name: Trivy scan images (matrix)
+    runs-on: ubuntu-latest
+    if: github.repository != 'github/super-linter'  # Skip for forks
+    
+    strategy:
+      matrix:
+        image:
+          - "ubuntu/bind9:9.18-24.04_edge"
+          - "pihole/pihole:2024.07.0"
+          - "mvance/unbound:1.21.1"
+          - "traefik:v3.1"
+
+    steps:
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: ${{ matrix.image }}
+          format: 'sarif'
+          output: 'trivy-results-${{ strategy.job-index }}.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always() && !github.event.repository.private
+        with:
+          sarif_file: 'trivy-results-${{ strategy.job-index }}.sarif'
