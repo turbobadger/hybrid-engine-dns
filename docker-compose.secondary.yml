@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  bind9-secondary:
+    image: ubuntu/bind9:9.18-22.04
+    container_name: bind9-secondary
+    restart: unless-stopped
+    # RNDC on localhost-only, mapped to 954 to avoid conflict with primary
+    ports:
+      - "127.0.0.1:954:953/tcp"
+    volumes:
+      - ./config-secondary:/etc/bind
+      - ./zones-secondary:/var/lib/bind
+      - ./logs-secondary:/var/log/bind
+      - bind9_secondary_cache:/var/cache/bind
+    environment:
+      - TZ=UTC
+      - BIND9_USER=bind
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    ulimits:
+      nofile:
+        soft: 8192
+        hard: 8192
+    command: >
+      bash -c "
+      if [ ! -s /etc/bind/rndc.key ] || grep -q 'YourBase64EncodedSecretKeyHere' /etc/bind/rndc.key 2>/dev/null; then
+        rndc-confgen -a -A hmac-sha256 -b 256 -c /etc/bind/rndc.key -u bind;
+      fi &&
+      mkdir -p /var/lib/bind/slaves &&
+      chown -R bind:bind /var/lib/bind /var/log/bind /var/cache/bind &&
+      named -g -c /etc/bind/named.conf -u bind"
+    healthcheck:
+      test: ["CMD-SHELL", "rndc status || named-checkconf -z"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  bind9_secondary_cache:
+    driver: local
+

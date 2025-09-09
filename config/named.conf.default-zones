@@ -1,0 +1,42 @@
+// Default zones configuration (unchanged from upstream)
+// These are the default zones required by BIND
+
+// Root zone
+zone "." {
+    type hint;
+    file "/usr/share/dns/root.hints";
+};
+
+// Localhost zones
+zone "localhost" {
+    type master;
+    file "/etc/bind/db.local";
+};
+
+zone "127.in-addr.arpa" {
+    type master;
+    file "/etc/bind/db.127";
+};
+
+zone "0.in-addr.arpa" {
+    type master;
+    file "/etc/bind/db.0";
+};
+
+zone "255.in-addr.arpa" {
+    type master;
+    file "/etc/bind/db.255";
+};
+
+// IPv6 localhost zones
+zone "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
+    type master;
+    file "/etc/bind/db.empty";
+};
+
+// RFC 1912 zones
+zone "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
+    type master;
+    file "/etc/bind/db.empty";
+};
+

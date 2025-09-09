@@ -1,0 +1,29 @@
+# Dynamic TLS and middleware configuration for Traefik
+
+tls:
+  options:
+    default:
+      minVersion: VersionTLS12
+      sniStrict: true
+      cipherSuites:
+        - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+
+http:
+  middlewares:
+    secure-headers:
+      headers:
+        frameDeny: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+        referrerPolicy: "no-referrer-when-downgrade"
+        stsSeconds: 15552000
+        stsIncludeSubdomains: true
+        # stsPreload: true  # enable only if you plan to submit to the preload list
+    # Create /auth/.htpasswd (mounted read-only) to enable
+    basicauth:
+      basicAuth:
+        usersFile: "/auth/.htpasswd"
+

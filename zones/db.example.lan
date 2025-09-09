@@ -1,0 +1,60 @@
+; Zone file for example.lan (sanitized)
+; Heads up: replace hostnames and IPs with your actual values.
+
+$TTL    604800
+@       IN      SOA     ns1.example.lan. admin.example.lan. (
+                         2025090801 ; Serial (YYYYMMDDNN format)
+                         604800     ; Refresh (1 week)
+                         86400      ; Retry (1 day)
+                         2419200    ; Expire (4 weeks)
+                         604800 )   ; Negative Cache TTL (1 week)
+
+; Name servers
+@       IN      NS      ns1.example.lan.
+@       IN      NS      ns2.example.lan.
+
+; A records (IPv4) organized by VLAN (examples)
+
+; DNS Infrastructure (typically on Servers VLAN)
+ns1             IN      A       192.0.2.10    ; TODO: Primary DNS server IP
+ns2             IN      A       192.0.2.11    ; TODO: Secondary DNS server IP
+
+; Default LAN (example) - 10.10.0.0/24
+router          IN      A       10.10.0.1     ; TODO: main router/gateway
+switch-main     IN      A       10.10.0.2
+firewall        IN      A       10.10.0.3
+workstation1    IN      A       10.10.0.100
+workstation2    IN      A       10.10.0.101
+
+; Trusted LAN (example) - 10.20.0.0/24
+gateway-trusted IN      A       10.20.0.1
+admin-pc        IN      A       10.20.0.100
+backup-server   IN      A       10.20.0.200
+
+; IoT LAN (example) - 10.30.0.0/24
+gateway-iot     IN      A       10.30.0.1
+hub-zigbee      IN      A       10.30.0.10
+hub-zwave       IN      A       10.30.0.11
+smart-thermostat IN     A       10.30.0.20
+smart-doorbell  IN      A       10.30.0.21
+
+; Monitors LAN (example) - 10.40.0.0/24
+gateway-monitors IN     A       10.40.0.1
+prometheus      IN      A       10.40.0.10
+grafana         IN      A       10.40.0.11
+
+; Servers LAN (example) - 192.168.50.0/24
+gateway-servers IN      A       192.168.50.1
+docker-host     IN      A       192.168.50.20
+web             IN      A       192.168.50.40
+
+; AAAA records (IPv6) - Optional, uncomment and modify as needed
+; ns1            IN      AAAA    2001:db8::10
+; web            IN      AAAA    2001:db8::40
+
+; CNAME records (Aliases)
+www             IN      CNAME   web.example.lan.
+api             IN      CNAME   web.example.lan.
+
+auth            IN      TXT     "v=spf1 ip4:192.0.2.0/24 ~all"  ; TODO: replace SPF range
+

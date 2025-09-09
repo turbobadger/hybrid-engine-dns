@@ -1,0 +1,51 @@
+// BIND9 options configuration - Authoritative-only mode
+// Recursive queries are handled by Unbound
+options {
+    directory "/var/cache/bind";
+    
+    // Authoritative-only: NO forwarders, NO recursion
+    recursion no;
+    allow-recursion { none; };
+    
+    // Security and access control
+    allow-query { trusted; internal_networks; };
+    allow-query-cache { none; };           // No cache for auth-only
+    allow-transfer { internal_networks; };  // Zone transfers only to internal networks
+    allow-update { none; };
+    
+    // Network settings - listen on all interfaces
+    listen-on port 53 { any; };
+    listen-on-v6 port 53 { any; };
+    
+    // Authoritative server settings
+    tcp-clients 100;
+    
+    // DNSSEC for authoritative zones only
+    dnssec-validation no;  // Unbound handles DNSSEC validation
+    dnssec-lookaside no;
+    
+    // Security features
+    auth-nxdomain no;
+    notify yes;             // Enable NOTIFY for zone updates (set to no if you don't use a secondary yet)
+    hostname none;
+    version none;
+    server-id none;
+    
+    // Response rate limiting
+    rate-limit {
+        responses-per-second 10;
+        window 5;
+    };
+    
+    // Authoritative server optimizations
+    minimal-responses yes;
+    additional-from-auth no;
+    additional-from-cache no;
+    
+    // Disable recursion-related features
+    fetch-glue no;
+    
+    // Query logging (optional)
+    // querylog yes;
+};
+
