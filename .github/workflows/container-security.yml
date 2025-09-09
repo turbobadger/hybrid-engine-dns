@@ -13,15 +13,21 @@ permissions:
 jobs:
   trivy-images:
     name: Trivy scan images (matrix)
+    # Skip entirely on private repos; we'll enable once the repo is public
+    if: ${{ !github.event.repository.private }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        image:
-          - traefik:v3.1
-          - ubuntu/bind9:9.18-22.04
-          - nlnetlabs/unbound:1.20.0
-          - pihole/pihole:2024.07.0
+        include:
+          - image: traefik:v3.1
+            label: traefik_v3.1
+          - image: ubuntu/bind9:9.18-22.04
+            label: ubuntu_bind9_9.18-22.04
+          - image: nlnetlabs/unbound:1.20.0
+            label: nlnetlabs_unbound_1.20.0
+          - image: pihole/pihole:2024.07.0
+            label: pihole_2024.07.0
     steps:
       - name: Pull image
         run: |
@@ -31,13 +37,12 @@ jobs:
         with:
           image-ref: ${{ matrix.image }}
           format: 'sarif'
-          output: 'trivy-${{ matrix.image }}.sarif'
+          output: 'trivy-${{ matrix.label }}.sarif'
           exit-code: '0'     # non-blocking; surfaces in code scanning
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH,MEDIUM,LOW'
-      - name: Upload SARIF to code scanning (public repos only)
-        if: ${{ !github.event.repository.private }}
+      - name: Upload SARIF to code scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-${{ matrix.image }}.sarif'
+          sarif_file: 'trivy-${{ matrix.label }}.sarif'
 
