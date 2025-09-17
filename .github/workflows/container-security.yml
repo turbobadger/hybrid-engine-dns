@@ -22,10 +22,10 @@ jobs:
         include:
           - image: traefik:v3.1
             label: traefik_v3.1
-          - image: ubuntu/bind9:9.18-22.04
-            label: ubuntu_bind9_9.18-22.04
-          - image: nlnetlabs/unbound:1.20.0
-            label: nlnetlabs_unbound_1.20.0
+          - image: ubuntu/bind9:9.18-22.04_lts
+            label: ubuntu_bind9_9.18-22.04_lts
+          - image: nlnetlabs/unbound:1.21.1
+            label: nlnetlabs_unbound_1.21.1
           - image: pihole/pihole:2024.07.0
             label: pihole_2024.07.0
     steps:
@@ -45,4 +45,5 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-${{ matrix.label }}.sarif'
+        continue-on-error: true  # Don't fail the entire job if upload fails
 
