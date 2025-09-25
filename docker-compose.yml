@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   # Traefik - reverse proxy with ACME DNS-01 (wildcard) and Docker+file providers
