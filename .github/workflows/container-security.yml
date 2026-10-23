@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         image:
-          - "ubuntu/bind9:9.18-24.04_edge"
+          - "ubuntu/bind9:9.18-22.04_lts"
           - "pihole/pihole:2024.07.0"
           - "mvance/unbound:1.21.1"
           - "traefik:v3.1"
